@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
+	"reflect"
 
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
@@ -54,7 +55,12 @@ func createRepo(name, description string) {
 		Name:        github.String(name),
 		Description: github.String(description),
 	}
-	client.Repositories.Create(ctx, "", repo)
+	repo, resp, err := client.Repositories.Create(ctx, "", repo)
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
+	fmt.Println("Resp: ", resp)
+	fmt.Println("Repo: ", reflect.TypeOf(repo))
 }
 
 func check(err error) {
