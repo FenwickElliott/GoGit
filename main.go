@@ -19,7 +19,8 @@ func main() {
 
 	// getRepos()
 	// getOrgs()
-	createRepo("NewRepo", "Created by GoGit")
+	// createRepo("NewRepo", "Created by GoGit")
+	deleteRepo("NewRepo")
 }
 
 func initialize() {
@@ -58,9 +59,22 @@ func createRepo(name, description string) {
 	repo, resp, err := client.Repositories.Create(ctx, "", repo)
 	if err != nil {
 		fmt.Println("Error: ", err)
+		fmt.Println("Resp: ", resp)
+		fmt.Println("Repo: ", reflect.TypeOf(repo))
+	} else {
+		fmt.Println("successfully created ", name)
 	}
-	fmt.Println("Resp: ", resp)
-	fmt.Println("Repo: ", reflect.TypeOf(repo))
+}
+
+func deleteRepo(repoName string) {
+	me, _, err := client.Users.Get(ctx, "")
+	check(err)
+	_, err = client.Repositories.Delete(ctx, *me.Login, repoName)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("successfully deleted", repoName)
+	}
 }
 
 func check(err error) {
