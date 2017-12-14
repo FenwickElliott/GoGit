@@ -5,26 +5,23 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"golang.org/x/oauth2"
-
 	"github.com/google/go-github/github"
+	"golang.org/x/oauth2"
 )
 
 func main() {
-	// save api token locally as 'token'
+	client := initialize()
+	fmt.Println(client)
+}
+
+func initialize() *github.Client {
+	// save api token locally
 	token, err := ioutil.ReadFile("token")
 	check(err)
-
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: string(token)})
 	tc := oauth2.NewClient(ctx, ts)
-
-	client := github.NewClient(tc)
-
-	repos, _, err := client.Repositories.List(ctx, "", nil)
-	check(err)
-
-	fmt.Println(repos)
+	return github.NewClient(tc)
 }
 
 func check(err error) {
