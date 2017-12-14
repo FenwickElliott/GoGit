@@ -10,6 +10,7 @@ import (
 )
 
 var client *github.Client
+var ctx context.Context
 
 func main() {
 	initialize()
@@ -19,15 +20,23 @@ func main() {
 	getWithoutAuth()
 }
 
+func initialize() {
+	// save api token locally
+	token, err := ioutil.ReadFile("token")
+	check(err)
+	ctx = context.Background()
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: string(token)})
+	tc := oauth2.NewClient(ctx, ts)
+	client = github.NewClient(tc)
+}
+
 func getRepos() {
-	ctx := context.Background()
 	repos, _, err := client.Repositories.List(ctx, "", nil)
 	check(err)
 	fmt.Println(repos)
 }
 
 func getOrgs() {
-	ctx := context.Background()
 	orgs, _, _ := client.Organizations.List(ctx, "", nil)
 	fmt.Println(orgs)
 }
@@ -37,16 +46,6 @@ func getWithoutAuth() {
 	client := github.NewClient(nil)
 	repos, _, _ := client.Repositories.List(ctx, "fenwickelliott", nil)
 	fmt.Println(repos)
-}
-
-func initialize() {
-	// save api token locally
-	token, err := ioutil.ReadFile("token")
-	check(err)
-	ctx := context.Background()
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: string(token)})
-	tc := oauth2.NewClient(ctx, ts)
-	client = github.NewClient(tc)
 }
 
 func check(err error) {
