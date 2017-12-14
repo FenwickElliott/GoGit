@@ -13,11 +13,12 @@ var client *github.Client
 var ctx context.Context
 
 func main() {
+	// getWithoutAuth()
 	initialize()
 
-	getRepos()
-	getOrgs()
-	getWithoutAuth()
+	// getRepos()
+	// getOrgs()
+	createRepo("NewRepo", "Created by GoGit")
 }
 
 func initialize() {
@@ -46,6 +47,14 @@ func getWithoutAuth() {
 	client := github.NewClient(nil)
 	repos, _, _ := client.Repositories.List(ctx, "fenwickelliott", nil)
 	fmt.Println(repos)
+}
+
+func createRepo(name, description string) {
+	repo := &github.Repository{
+		Name:        github.String(name),
+		Description: github.String(description),
+	}
+	client.Repositories.Create(ctx, "", repo)
 }
 
 func check(err error) {
