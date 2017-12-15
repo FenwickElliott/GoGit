@@ -21,7 +21,7 @@ func main() {
 
 	fmt.Println(gogit.Owner)
 
-	getRepos()
+	// getRepos()
 	// getOrgs()
 	// createRepo("GoGit", "A playground for consuming go-github")
 	// deleteRepo("NewRop")
@@ -45,7 +45,7 @@ func getRepo(owner, repoName string) github.Repository {
 	return *repo
 }
 
-func getRepos() []*github.Repository {
+func getRepos() {
 	repos, _, err := client.Repositories.List(ctx, "", nil)
 	check(err)
 	fmt.Println(repos)
