@@ -17,10 +17,11 @@ func main() {
 	// getWithoutAuth()
 	initialize()
 
+	getRepo("fenwickelliott", "GoGit")
 	// getRepos()
 	// getOrgs()
-	// createRepo("NewRepo", "Created by GoGit")
-	deleteRepo("NewRepo")
+	// createRepo("GoGit", "A playground for consuming go-github")
+	// deleteRepo("NewRop")
 }
 
 func initialize() {
@@ -31,6 +32,15 @@ func initialize() {
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: string(token)})
 	tc := oauth2.NewClient(ctx, ts)
 	client = github.NewClient(tc)
+}
+
+func getRepo(owner, repoName string) {
+	fmt.Println(owner, repoName)
+	repo, _, err := client.Repositories.Get(ctx, owner, repoName)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(repo)
 }
 
 func getRepos() {
