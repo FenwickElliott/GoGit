@@ -45,7 +45,7 @@ func getRepo(owner, repoName string) github.Repository {
 	return *repo
 }
 
-func getRepos() {
+func getRepos() []*github.Repository {
 	repos, _, err := client.Repositories.List(ctx, "", nil)
 	check(err)
 	fmt.Println(repos)
